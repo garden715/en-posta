@@ -12,10 +12,10 @@ public class Enposta {
 		posta.load("model");
 		posta.buildFailLink();
 		
-		Analyzer a = new Analyzer();
+		Analyzer wordAnlyzer = new Analyzer();
 		BufferedReader br;
 		try {
-			br = new BufferedReader(new FileReader("a.txt"));
+			br = new BufferedReader(new FileReader("scriptset/a.txt"));
 			while (true) {
 				String line = br.readLine();
 				if (line == null)
