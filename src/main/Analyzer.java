@@ -1,7 +1,9 @@
+package main;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 public class Analyzer {
 	private String midPath = "wordset/mid.txt";
@@ -16,8 +18,7 @@ public class Analyzer {
 	public Analyzer() {
 		// TODO Auto-generated constructor stub
 		initPosTagsSet();
-		initclassifyingWords();
-
+		initWordSet();
 	}
 
 	private void initPosTagsSet() {
@@ -30,13 +31,13 @@ public class Analyzer {
 		posTags.add("VB");
 	}
 
-	private void initclassifyingWords() {
+	private void initWordSet() {
 		midWords = makeWordsHash(midPath);
 		satWords = makeWordsHash(satPath);
 		greWords = makeWordsHash(grePath);
 	}
 
-	private LinkedHashSet makeWordsHash(String path) {
+	private LinkedHashSet<String> makeWordsHash(String path) {
 		LinkedHashSet<String> words = new LinkedHashSet<>();
 		BufferedReader br;
 		try {
@@ -56,4 +57,22 @@ public class Analyzer {
 		return words;
 	}
 
+	public SpeechInfo classifyingScript(List<String> resultList, SpeechInfo speech) {
+		for (String result : resultList) {
+			String posTag = result.split("/")[1];
+			String word = result.split("/")[0];
+			
+			if (posTags.contains(posTag)) {
+				if (greWords.contains(word)) {
+					speech.greCount++;
+				} else if(satWords.contains(word)) {
+					speech.satCount++;
+				} else if(midWords.contains(word)) {
+					speech.midCount++;
+				}
+			}
+		}
+		speech.determieLevel();
+		return speech;
+	}
 }
